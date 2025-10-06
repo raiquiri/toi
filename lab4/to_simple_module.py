@@ -17,12 +17,10 @@ def lift_solutions(function, function_prime, a0, p, k):
     current_module = p
 
     for i in range(1, k):
-        next_module = current_module * p
-
         f_x = function(current_x)
         f_prime = function_prime(current_x)
 
-        # Проверка условия подъема
+        # Проверка, что f_x является решением
         if f_x % current_module != 0:
             print(f"Ошибка на шаге i={i}: f({current_x}) = {f_x} не делится на {current_module}.")
             return
@@ -47,7 +45,7 @@ def lift_solutions(function, function_prime, a0, p, k):
                 return
 
         current_x += a_i * current_module
-        current_module = next_module
+        current_module = current_module * p
 
         # Финальная проверка
     if function(current_x) % current_module == 0:
@@ -72,7 +70,7 @@ def solve_equation(function, function_prime, p, k):
     # Подъём
     solutions_k = []
     for a0 in solutions:
-        print(f"Поднимаем решение a0 = {a0}...")
+        print(f"Поднимаем решение a0 = {a0}")
         solution = lift_solutions(function, function_prime, a0, p, k)
         if solution is not None:
             solutions_k.append(solution)
@@ -82,7 +80,7 @@ def solve_equation(function, function_prime, p, k):
 
 
 def main():
-    function = lambda x: 3*x**2 - 2*x + 2; function_prime = lambda x: 6*x - 2
+    function = lambda x: x**2 - 2; function_prime = lambda x: 2*x
     p = 7; k = 2
     solve_equation(function, function_prime, p, k)
 
