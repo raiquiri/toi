@@ -1,5 +1,12 @@
-BITS_IN_ONE_CODE_WORD = 12
-LEVEL_LIST = [1, 2, 4, 8]
+BITS = 25
+LEVEL_LIST = []
+value = 1
+while value <= BITS:
+    LEVEL_LIST.append(value)
+    value *= 2
+
+BITS_IN_ONE_CODE_WORD = BITS + len(LEVEL_LIST)
+
 
 
 def bin_to_char(binary_str: str) -> str:
@@ -22,7 +29,7 @@ def char_to_binary(char: str) -> str:
 def str_to_binary(input_str: str) -> str:
     binary_str = ""
     for char in input_str:
-        binary_str += char_to_binary(char) + " "
+        binary_str += char_to_binary(char)
     return binary_str
 
 def sum_skip(array, n):
@@ -69,7 +76,8 @@ def decode(input_str: str) -> str:
     return  output_str
 
 def encode(input_str: str) -> str:
-    binary_list = str_to_binary(input_str).split(" ")[:-1]
+    #binary_list = str_to_binary(input_str).split(" ")[:-1]
+    binary_list = [str_to_binary(input_str)[i:i+BITS] for i in range(0, len(str_to_binary(input_str)), BITS)]
     output_str = ""
     for current_word in binary_list:
         # заполняем кодовое слово
@@ -87,7 +95,7 @@ def encode(input_str: str) -> str:
             code_word[level-1] = sum_skip(code_word, level) % 2
 
         output_str += ''.join(str(x) for x in code_word)
-
+        print(f'Изначальное слово: {current_word};\tЗакодированное слово: {''.join(str(x) for x in code_word)}')
     return output_str
 
 def main():

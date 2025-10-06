@@ -1,7 +1,5 @@
 import struct
 from dataclasses import dataclass
-from pickletools import optimize
-from pkgutil import resolve_name
 from typing import List, Optional, Tuple
 
 

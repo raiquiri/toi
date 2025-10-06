@@ -1,3 +1,4 @@
+import math
 from typing import Dict, List, Tuple
 
 
@@ -12,7 +13,7 @@ def create_dictionary(input_str: str) -> List[Tuple[str, int]]:
     index = 1
 
     # Логи
-    print(f'index\tchar\tnumber')
+    print(f'index\tchar\tnumber\tcode')
 
     while i < len(input_str):
         current_char = input_str[i]
@@ -32,8 +33,16 @@ def create_dictionary(input_str: str) -> List[Tuple[str, int]]:
             dictionary[current_word] = number_word
             output.append((current_word, number_word))
 
+            bin_num = bin(number_word)[2:]
+            if i != 0:
+                null_num = math.log(i, 2)
+                null_num = math.ceil(null_num)
+                null_str = '0' * (null_num - len(bin_num))
+            else:
+                null_str = ''
+
             # Логи
-            print(f'{index}\t\t{input_str[i:end]}\t\t{dictionary.get(input_str[i:end])}')
+            print(f'{index}\t\t{input_str[i:end]}\t\t{dictionary.get(input_str[i:end])}\t\t{null_str}{bin_num}')
 
             # -1 потому что end не включается в срез и ещё -1 потому что в конце идёт инкремент
             i = end - 2
@@ -43,8 +52,14 @@ def create_dictionary(input_str: str) -> List[Tuple[str, int]]:
             dictionary[current_char] = 0
             output.append((current_char, 0))
 
+            if i != 0 and i != 1:
+                null_num = math.log(i, 2)
+                null_num = math.ceil(null_num)
+                null_str = '0' * null_num
+            else:
+                null_str = ''
             # Логи
-            print(f'{index}\t\t{current_char}\t\t0')
+            print(f'{index}\t\t{current_char}\t\t0\t\t{null_str}bin({current_char})')
 
         i += 1
         index += 1
@@ -74,11 +89,11 @@ def encode(input_str: str) -> str:
 
 
 def main():
-    start_str = 'IF_WE_CANNOT_DO_AS_WE_WOULD_WE_SHOULD_DO_AS_WE_CAN'
+    start_str = "TO_BE_OR_NOT_BE_TO_BE_OR_NOT_BE_TO_BE_OR_NOT_BE_TO_BE_OR_NOT_BE_TO_BE_OR_NOT_BE_TO_BE_OR_NOT_BE_TO_BE_OR_NOT_BE_"
     #print(f'start string:\n{start_str}')
     compress = encode(start_str)
     #print(f'compress:\n{compress}')
-    print(f'total bits: {len(compress)}')
+
 
 
 if '__main__' == __name__:
