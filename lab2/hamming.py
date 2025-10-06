@@ -1,4 +1,4 @@
-BITS = 25
+BITS = 32
 LEVEL_LIST = []
 value = 1
 while value <= BITS:
@@ -6,6 +6,7 @@ while value <= BITS:
     value *= 2
 
 BITS_IN_ONE_CODE_WORD = BITS + len(LEVEL_LIST)
+LAST_WORD_LEN = 0
 
 
 
@@ -71,13 +72,20 @@ def decode(input_str: str) -> str:
             else:
                 output_word += current_word[i]
 
-        output_str += bin_to_char(output_word)
+        if current_word == binary_list[len(binary_list) - 1]:
+            output_word = output_word[:LAST_WORD_LEN]
 
-    return  output_str
+        output_str += output_word
+
+    chunks = [output_str[i:i+8] for i in range(0, len(output_str), 8)]
+    result = ''.join([bin_to_char(chunk) for chunk in chunks])
+
+    return  result
 
 def encode(input_str: str) -> str:
-    #binary_list = str_to_binary(input_str).split(" ")[:-1]
+    global LAST_WORD_LEN
     binary_list = [str_to_binary(input_str)[i:i+BITS] for i in range(0, len(str_to_binary(input_str)), BITS)]
+    LAST_WORD_LEN = len(binary_list[len(binary_list)-1])
     output_str = ""
     for current_word in binary_list:
         # заполняем кодовое слово
@@ -87,7 +95,10 @@ def encode(input_str: str) -> str:
             if i + 1 in LEVEL_LIST:
                 code_word.append(0)
             else:
-                code_word.append(current_word[char_index])
+                if char_index < len(current_word):
+                    code_word.append(current_word[char_index])
+                else:
+                    code_word.append(0)
                 char_index += 1
 
         # заполняем контрольные биты
